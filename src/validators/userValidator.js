@@ -1,30 +1,44 @@
-const { check } = require("express-validator");
+import Joi from 'joi';
 
-exports.userValidator = [
-  check("email")
-    .not()
-    .isEmpty()
-    .withMessage("Se requiere el email")
-    .isEmail()
-    .withMessage("Formato de email inválido"),
-  check("password")
-    .not()
-    .isEmpty()
-    .withMessage("Se requiere contraseña")
-    .isLength({ min: 8, max: 20 })
-    .withMessage("La contraseña debe tener entre 8 y 20 caracteres "),
-  check("nombre").isString().withMessage("El nombre no debe contener números"),
-];
+const userSchema = Joi.object({
+  email: Joi.string().email().required().messages({
+    'string.email': 'El campo de correo electrónico debe ser una dirección de correo válida',
+    'any.required': 'El campo de correo electrónico es obligatorio',
+  }),
+  password: Joi.string()
+    .min(8)
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+    .required()
+    .messages({
+      'string.min': 'La contraseña debe tener al menos 8 caracteres',
+      'string.pattern.base':
+        'La contraseña debe contener al menos una letra mayúscula, una minúscula, un número y un carácter especial',
+      'any.required': 'El campo de contraseña es obligatorio',
+    }),
+});
 
-exports.loginValidator = [
-  check("email")
-    .not()
-    .isEmpty()
-    .withMessage("Se requiere el email")
-    .isEmail()
-    .withMessage("Formato de email inválido"),
-  check("password")
-    .not()
-    .isEmpty()
-    .withMessage("Se requiere contraseña")
-];
+const validateUser = (req, res, next) => {
+  try {
+    const { error } = userSchema.validate(req.body, { abortEarly: false });
+    if (!error) {
+      return next();
+    }
+
+    const validationErrors = error.details.map((err) => err.message);
+    return res.status(400).json({
+      message: 'Hubo errores de validación en los datos del usuario',
+      data: null,
+      errors: validationErrors,
+    });
+  } catch (err) {
+    console.error('Error en la validación del usuario:', err);
+    return res.status(500).json({
+      message: 'Hubo un error interno en el servidor',
+      data: null,
+      error: true,
+    });
+  }
+};
+
+export default validateUser;
+

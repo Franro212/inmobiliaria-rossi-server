@@ -1,9 +1,9 @@
-const knex = require("../config/inmobiliariaRossi_DB");
+
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 
 
-exports.infoUser = (req, res) => {
+const getAllUser = (req, res) => {
   res.json(req.user.nombre);
 };
 
