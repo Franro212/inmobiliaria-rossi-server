@@ -3,7 +3,7 @@ import Inmuebles from "../models/Inmuebles";
 
 
 
-const getInmuebles = async (req, res) => {
+export const getInmuebles = async (req, res) => {
   try {
     const inmuebles = await Inmuebles.find();
     return res.status(200).json({
@@ -21,7 +21,7 @@ const getInmuebles = async (req, res) => {
   }
 };
 
-const getInmuebleByID = async (req, res) => {
+export const getInmuebleByID = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.isValidObjectId(id)) {
@@ -56,7 +56,7 @@ const getInmuebleByID = async (req, res) => {
   }
 };
 
-const createInmueble = async (req, res) => {
+export const createInmueble = async (req, res) => {
   const {
     tipo_operacion,
     tipo_inmueble,
@@ -112,7 +112,7 @@ const createInmueble = async (req, res) => {
   }
 };
 
-const updateInmueble = async (req, res) => {
+export const updateInmueble = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.isValidObjectId(id)) {
@@ -199,7 +199,7 @@ const updateInmueble = async (req, res) => {
   }
 };
 
-const deleteInmueble = async (req, res) => {
+export const deleteInmueble = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.isValidObjectId(id)) {
@@ -234,12 +234,3 @@ const deleteInmueble = async (req, res) => {
   }
 };
 
-const inmueblesController = {
-  getInmuebles,
-  getInmuebleByID,
-  createInmueble,
-  updateInmueble,
-  deleteInmueble,
-};
-
-export default inmueblesController;
