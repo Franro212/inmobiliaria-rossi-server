@@ -21,6 +21,10 @@ const InmuebleSchema = new Schema({
     type: String,
     required: true,
   },
+  tipo_usuario:{
+    type: String,
+    required: true,
+  },
 });
 
-export default mongoose.model("Inmueble", InmuebleSchema);
+export default mongoose.model("Admins", InmuebleSchema);
