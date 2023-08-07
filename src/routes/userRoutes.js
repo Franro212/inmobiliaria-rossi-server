@@ -1,10 +1,13 @@
 import express from "express";
-import { login, register } from "../controllers/userController.js";
+import { deleteUser, getAdmins, login, register, updateUser } from "../controllers/userController.js";
+import verifyToken from "../validators/auth.js";
+import { validateUser, validateUserLogin } from "../validators/userValidator.js";
 const router = express.Router();
 
-// router.get("/", listUser);
- router.post("/login",  login);
-router.post("/", register);
-//router.delete("/:id", verifyToken, verifyPerfil, deleteUser);
+router.get("/",verifyToken, getAdmins);
+router.post("/login",validateUserLogin, login);
+router.post("/",verifyToken, validateUser, register);
+router.put("/:id",verifyToken, validateUser, updateUser);
+router.delete("/:id",verifyToken, deleteUser);
 
 export default  router;
