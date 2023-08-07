@@ -1,91 +1,101 @@
-
-const bcrypt = require('bcryptjs');
+import Admins from "../models/admin";
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-
-const getAllUser = (req, res) => {
-  res.json(req.user.nombre);
-};
-
-exports.listUser = (req, res) => {
-  knex("usuarios")
-    .then((resultado) => {
-      res.json(resultado);
-    })
-    .catch((error) => {
-      res.status(400).json({ error: error.message });
+export const getAdmins = async (req, res) => {
+  try {
+    const admins = await Admins.find();
+    if (!admins.length) {
+      return res.status(404).json({
+        message: "No es administrador!",
+        data: [],
+        error: true,
+      });
+    }
+    return res.status(200).json({
+      message: "Administrador encontrado!",
+      data: admins,
+      error: false,
     });
-};
-
-exports.register = async (req, res) => {
-  const { email, password, nombre, tipo_usuario } = req.body;
-  console.log();
-  const salt = await bcrypt.genSaltSync(10);
-  const passwordEncrypt = await bcrypt.hashSync(password, salt);
-
-  knex("usuarios")
-    .where({ email: email })
-    .then((resultado) => {
-      if (resultado.length) {
-        res.status(400).json({ error: "El email ya esta siendo utilizado" });
-        return;
-      }
-      knex("usuarios")
-        .insert({
-          email: email,
-          password: passwordEncrypt,
-          nombre: nombre,
-          tipo_usuario: tipo_usuario,
-        })
-        .then(() => {
-          res.json({
-            success: true,
-            mensaje: "El usuario se ha registrado correctamente",
-          });
-        })
-        .catch((error) => {
-          res.status(400).json({ error: error.message });
-        });
-    })
-    .catch((error) => {
-      res.status(400).json({ error: error.message });
+  } catch (error) {
+    return res.status(500).json({
+      message: error,
+      data: undefined,
+      error: true,
     });
+  }
 };
 
-exports.login = (req, res) => {
+export const register = async (req, res) => {
+  try {
+    const { firstName, lastName, email, password, tipo_usuario } = req.body;
+    const salt = await bcrypt.genSaltSync(10);
+    const passwordEncrypt = await bcrypt.hashSync(password, salt);
+    const createdAdmin = await Admins.create({
+      firstName,
+      lastName,
+      email,
+      password: passwordEncrypt,
+      tipo_usuario,
+    });
+    if (!createdAdmin) {
+      return res.status(400).json({
+        message: "El usuario no se pudo crear",
+        data: {},
+        error: true,
+      });
+    }
+    return res.status(201).json({
+      message: "Usuario creado correctamente",
+      data: createdAdmin,
+      error: false,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error,
+      data: undefined,
+      error: true,
+    });
+  }
+};
+
+
+export const login = async (req, res) => {
   const { email, password } = req.body;
 
-  knex("usuarios")
-    .where({ email: email })
-    .then(async (resultado) => {
-      if (!resultado.length) {
-        res.status(404).json({
-          error: "Email y/o contraseña incorrecta/s",
-        });
-        return;
-      }
-      const validatePassword = await bcrypt.compare(
-        password,
-        resultado[0].password
-      );
-      if (!validatePassword) {
-        res.status(404).json({
-          error: "Email y/o contraseña incorrecta/s",
-        });
-        return;
-      }
-      const token = jwt.sign(
-        {
-          nombre: resultado[0].nombre,
-          email: resultado[0].email,
-          id: resultado[0].id,
-          tipo_usuario: resultado[0].tipo_usuario,
-        },
-        process.env.TOKEN_SECRET
-      );
+  try {
+    const user = await Admins.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        error: 'Email y/o contraseña incorrecta/s',
+      });
+    }
 
-      res.json({ success: true, token: token });
+    const validatePassword = await bcrypt.compare(password, user.password);
+    if (!validatePassword) {
+      return res.status(404).json({
+        error: 'Email y/o contraseña incorrecta/s',
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        nombre: user.firstName,
+        apellido: user.lastName,
+        email: user.email,
+        id: user._id.toString(),
+        tipo_usuario: user.tipo_usuario,
+      },
+      process.env.TOKEN_SECRET,
+    );
+
+    res.json({ success: true, token });
+  } catch (error) {
+    console.error('Error en el proceso de login:', error.message);
+    res.status(500).json({
+      error: 'Hubo un error interno en el servidor',
     });
+  }
 };
 
 
@@ -102,4 +112,3 @@ exports.deleteUser = (req, res) => {
       res.status(404).json({ error: error });
     });
 };
-
