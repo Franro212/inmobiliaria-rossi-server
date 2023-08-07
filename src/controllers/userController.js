@@ -59,6 +59,50 @@ export const register = async (req, res) => {
   }
 };
 
+export const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { firstName, lastName, email, password, tipo_usuario } = req.body;
+
+  try {
+    const existingUser = await Admins.findById(id);
+
+    if (!existingUser) {
+      return res.status(404).json({
+        message: 'El usuario no fue encontrado',
+        data: {},
+        error: true,
+      });
+    }
+
+    existingUser.firstName = firstName;
+    existingUser.lastName = lastName;
+    existingUser.email = email;
+    existingUser.tipo_usuario = tipo_usuario;
+
+    if (password) {
+      const salt = await bcrypt.genSaltSync(10);
+      const passwordEncrypt = await bcrypt.hashSync(password, salt);
+      existingUser.password = passwordEncrypt;
+    }
+
+    const updatedUser = await existingUser.save();
+
+    res.status(200).json({
+      message: 'Usuario actualizado correctamente',
+      data: updatedUser,
+      error: false,
+    });
+  } catch (error) {
+    console.error('Error en el proceso de actualización:', error.message);
+    res.status(500).json({
+      message: error.message,
+      data: undefined,
+      error: true,
+    });
+  }
+};
+
+
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -98,17 +142,19 @@ export const login = async (req, res) => {
   }
 };
 
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
 
-exports.deleteUser = (req, res) => {
-  const id = req.params.id;
-  knex("usuarios")
-    .where("id_usuario", id)
-    .del()
+  try {
+    const deletedUser = await Admins.findByIdAndDelete(id);
 
-    .then(() => {
-      res.json({ mensaje: "El ususario ha sido eliminado correctamente" });
-    })
-    .catch((error) => {
-      res.status(404).json({ error: error });
-    });
+    if (!deletedUser) {
+      return res.status(404).json({ error: 'El usuario no fue encontrado' });
+    }
+
+    res.json({ mensaje: 'El usuario ha sido eliminado correctamente' });
+  } catch (error) {
+    console.error('Error en el proceso de eliminación:', error.message);
+    res.status(500).json({ error: 'Hubo un error interno en el servidor' });
+  }
 };
