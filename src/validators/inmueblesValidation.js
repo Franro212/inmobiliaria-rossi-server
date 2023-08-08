@@ -19,7 +19,7 @@ const userSchema = Joi.object({
     "any.required": "El campo tipo de inmueble es obligatorio",
   }),
   banio: Joi.number().integer().min(1).max(99).messages({
-    "number.base": "El número de baños debe ser un número",
+    "number.base": "Solo se aceptan números",
     "number.integer": "El número de baños debe ser un entero",
     "number.min": "El número de baños debe ser como mínimo {#limit}",
     "number.max": "El número de baños debe ser como máximo {#limit}",
@@ -38,6 +38,12 @@ const userSchema = Joi.object({
     "string.min": "La ciudad debe tener al menos {#limit} caracteres",
     "string.max": "La ciudad debe tener como máximo {#limit} caracteres",
     "any.required": "El campo ciudad es obligatorio",
+  }),
+  dormitorio: Joi.number().integer().min(1).max(99).messages({
+    "number.base": "Solo se aceptan números",
+    "number.integer": "El número de dormitorios debe ser un entero",
+    "number.min": "El número de dormitorios debe ser como mínimo {#limit}",
+    "number.max": "El número de dormitorios debe ser como máximo {#limit}",
   }),
   descripcion: Joi.string().min(10).max(200).messages({
     "string.base": "La descripción solo acepta letras",

@@ -12,6 +12,9 @@ const InmuebleSchema = new Schema({
   banio: {
     type: String,
   },
+  dormitorio: {
+    type: String,
+  },
   m2_terreno: {
     type: String,
   },
