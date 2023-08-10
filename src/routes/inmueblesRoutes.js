@@ -20,8 +20,8 @@ router
   .get("/:id", verifyToken, getInmuebleByID)
   .post(
     "/",
-    // verifyToken,
-    // verifyPerfil,
+    verifyToken,
+    verifyPerfil,
     validateInmuebles,
     upload.single("images"),
     createInmueble,
