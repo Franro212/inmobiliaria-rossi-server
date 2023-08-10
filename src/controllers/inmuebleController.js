@@ -57,6 +57,10 @@ export const getInmuebleByID = async (req, res) => {
         message: "Inmueble no encontrado",
       });
     }
+    const base64String = Buffer.from(inmueble.images[0].data).toString(
+      "base64",
+    );
+    inmueble.images[0].data = base64String;
 
     return res.status(200).json({
       success: true,
