@@ -1,15 +1,32 @@
 import mongoose from "mongoose";
 import Inmuebles from "../models/Inmuebles";
 
-
-
 export const getInmuebles = async (req, res) => {
   try {
     const inmuebles = await Inmuebles.find();
+
+    const inmueblesWithBase64Strings = inmuebles.map((inmueble) => {
+      if (inmueble.images && inmueble.images.length > 0) {
+        const base64String = Buffer.from(inmueble.images[0].data).toString(
+          "base64",
+        );
+        return {
+          ...inmueble.toObject(),
+          images: [
+            {
+              data: base64String,
+              contentType: inmueble.images[0].contentType,
+            },
+          ],
+        };
+      }
+      return inmueble;
+    });
+
     return res.status(200).json({
       success: true,
       message: "Lista de Inmuebles",
-      data: inmuebles,
+      data: inmueblesWithBase64Strings,
     });
   } catch (error) {
     console.error("Error al obtener los inmuebles:", error);
@@ -233,4 +250,3 @@ export const deleteInmueble = async (req, res) => {
     });
   }
 };
-
