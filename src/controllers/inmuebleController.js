@@ -92,9 +92,9 @@ export const createInmueble = async (req, res) => {
     departamento,
     barrio,
     direccion,
+    moneda,
   } = req.body;
   const { buffer, mimetype } = req.file;
-
   try {
     const newInmueble = await Inmuebles.create({
       tipo_operacion,
@@ -110,6 +110,7 @@ export const createInmueble = async (req, res) => {
       departamento,
       barrio,
       direccion,
+      moneda,
       images: [
         {
           data: buffer,
@@ -167,6 +168,7 @@ export const updateInmueble = async (req, res) => {
       departamento,
       barrio,
       direccion,
+      moneda,
     } = req.body;
 
     const updatedInmueble = {
@@ -183,6 +185,7 @@ export const updateInmueble = async (req, res) => {
       departamento: departamento || inmueble.departamento,
       barrio: barrio || inmueble.barrio,
       direccion: direccion || inmueble.direccion,
+      moneda: moneda || inmueble.moneda,
     };
 
     let hasChanges = false;

@@ -42,6 +42,10 @@ const InmuebleSchema = new Schema({
   barrio: {
     type: String,
   },
+  moneda: {
+    type: String,
+    required: true,
+  },
   direccion: {
     type: String,
     required: true,
