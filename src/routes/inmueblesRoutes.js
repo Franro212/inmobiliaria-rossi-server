@@ -17,16 +17,16 @@ const upload = multer({ storage: storage });
 
 router
   .get("/", getInmuebles)
-  .get("/:id", verifyToken, getInmuebleByID)
+  .get("/:id", getInmuebleByID)
   .post(
     "/",
     verifyToken,
     verifyPerfil,
-    validateInmuebles,
+
     upload.single("images"),
     createInmueble,
   )
-  .put("/:id", verifyToken, verifyPerfil, validateInmuebles, updateInmueble)
+  .put("/:id", verifyToken, verifyPerfil, updateInmueble)
   .delete("/:id", verifyToken, verifyPerfil, deleteInmueble);
 
 export default router;
