@@ -57,15 +57,22 @@ export const getInmuebleByID = async (req, res) => {
         message: "Inmueble no encontrado",
       });
     }
-    const base64String = Buffer.from(inmueble.images[0].data).toString(
-      "base64",
-    );
-    inmueble.images[0].data = base64String;
+
+    const base64String = Buffer.from(inmueble.images[0].data).toString("base64");
+    const inmuebleWithImageBase64 = {
+      ...inmueble.toObject(),
+      images: [
+        {
+          data: base64String,
+          contentType: inmueble.images[0].contentType,
+        },
+      ],
+    };
 
     return res.status(200).json({
       success: true,
       message: "Inmueble encontrado",
-      data: inmueble,
+      data: inmuebleWithImageBase64,
     });
   } catch (error) {
     console.error("Error al obtener el inmueble:", error);
@@ -76,6 +83,7 @@ export const getInmuebleByID = async (req, res) => {
     });
   }
 };
+
 
 export const createInmueble = async (req, res) => {
   const {
