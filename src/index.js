@@ -16,15 +16,19 @@ mongoose
       app.listen(process.env.PORT, (err) => {
         if (err) throw err;
         // eslint-disable-next-line no-console
-        console.log(`server listening on port: ${process.env.PORT}`);
+        console.log(`Servidor listo en el puerto: ${process.env.PORT}`);
       });
     } catch (err) {
       // eslint-disable-next-line no-console
-      console.log("There was an error starting the server: ", err);
+      console.log("Hay un error al iniciar el servidor: ", err);
     }
   })
   // eslint-disable-next-line no-console
   .catch((e) => console.log(e));
+
+app.get("/favicon.ico", (req, res) => {
+  res.status(204).end();
+});
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
