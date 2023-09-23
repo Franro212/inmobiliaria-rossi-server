@@ -26,10 +26,3 @@ mongoose
   // eslint-disable-next-line no-console
   .catch((e) => console.log(e));
 
-app.get("/favicon.ico", (req, res) => {
-  res.status(204).end();
-});
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
