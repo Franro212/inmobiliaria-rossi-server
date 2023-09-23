@@ -4,29 +4,22 @@ import Inmuebles from "../models/Inmuebles";
 export const getInmuebles = async (req, res) => {
   try {
     const inmuebles = await Inmuebles.find();
+    const inmueblesWithImages = inmuebles.map((inmueble) => {
+      const imagesWithBase64 = inmueble.images.map((image) => ({
+        data: Buffer.from(image.data).toString("base64"),
+        contentType: image.contentType,
+      }));
 
-    const inmueblesWithBase64Strings = inmuebles.map((inmueble) => {
-      if (inmueble.images && inmueble.images.length > 0) {
-        const base64String = Buffer.from(inmueble.images[0].data).toString(
-          "base64",
-        );
-        return {
-          ...inmueble.toObject(),
-          images: [
-            {
-              data: base64String,
-              contentType: inmueble.images[0].contentType,
-            },
-          ],
-        };
-      }
-      return inmueble;
+      return {
+        ...inmueble.toObject(),
+        images: imagesWithBase64,
+      };
     });
 
     return res.status(200).json({
       success: true,
       message: "Lista de Inmuebles",
-      data: inmueblesWithBase64Strings,
+      data: inmueblesWithImages,
     });
   } catch (error) {
     console.error("Error al obtener los inmuebles:", error);
@@ -58,21 +51,21 @@ export const getInmuebleByID = async (req, res) => {
       });
     }
 
-    const base64String = Buffer.from(inmueble.images[0].data).toString("base64");
-    const inmuebleWithImageBase64 = {
+    // Mapea todas las imágenes de la propiedad
+    const imagesWithBase64 = inmueble.images.map((image) => ({
+      data: Buffer.from(image.data).toString("base64"),
+      contentType: image.contentType,
+    }));
+
+    const inmuebleWithImagesBase64 = {
       ...inmueble.toObject(),
-      images: [
-        {
-          data: base64String,
-          contentType: inmueble.images[0].contentType,
-        },
-      ],
+      images: imagesWithBase64,
     };
 
     return res.status(200).json({
       success: true,
       message: "Inmueble encontrado",
-      data: inmuebleWithImageBase64,
+      data: inmuebleWithImagesBase64,
     });
   } catch (error) {
     console.error("Error al obtener el inmueble:", error);
@@ -83,7 +76,6 @@ export const getInmuebleByID = async (req, res) => {
     });
   }
 };
-
 
 export const createInmueble = async (req, res) => {
   const {
@@ -102,8 +94,11 @@ export const createInmueble = async (req, res) => {
     direccion,
     moneda,
   } = req.body;
-  const { buffer, mimetype } = req.file;
   try {
+    const images = req.files.map((file) => ({
+      data: file.buffer,
+      contentType: file.mimetype,
+    }));
     const newInmueble = await Inmuebles.create({
       tipo_operacion,
       tipo_inmueble,
@@ -119,12 +114,7 @@ export const createInmueble = async (req, res) => {
       barrio,
       direccion,
       moneda,
-      images: [
-        {
-          data: buffer,
-          contentType: mimetype,
-        },
-      ],
+      images,
     });
 
     return res.status(201).json({

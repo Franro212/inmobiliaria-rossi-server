@@ -13,7 +13,9 @@ import validateInmuebles from "../validators/inmueblesValidation";
 
 const router = express.Router();
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage
+});
 
 router
   .get("/", getInmuebles)
@@ -23,7 +25,7 @@ router
     verifyToken,
     verifyPerfil,
 
-    upload.single("images"),
+    upload.array("images", 6),
     createInmueble,
   )
   .put("/:id", verifyToken, verifyPerfil, updateInmueble)
