@@ -1,8 +1,16 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import app from "./app";
+import express from 'express';
+import cors from 'cors';
+import router from './routes';
 
 dotenv.config();
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use('/api', router);
 
 mongoose
   .connect(process.env.DB_URL, {
@@ -26,6 +34,6 @@ mongoose
   // eslint-disable-next-line no-console
   .catch((e) => console.log(e));
 
- app.get("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Hello World!");
- });
+});
