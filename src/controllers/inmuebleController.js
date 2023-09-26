@@ -51,7 +51,6 @@ export const getInmuebleByID = async (req, res) => {
       });
     }
 
-    // Mapea todas las imágenes de la propiedad
     const imagesWithBase64 = inmueble.images.map((image) => ({
       data: Buffer.from(image.data).toString("base64"),
       contentType: image.contentType,

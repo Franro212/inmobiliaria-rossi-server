@@ -9,7 +9,6 @@ import {
 import multer from "multer";
 import verifyToken from "../validators/auth";
 import { verifyPerfil } from "../validators/perfil";
-import validateInmuebles from "../validators/inmueblesValidation";
 
 const router = express.Router();
 const storage = multer.memoryStorage();
