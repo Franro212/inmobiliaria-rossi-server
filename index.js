@@ -26,6 +26,6 @@ mongoose
   // eslint-disable-next-line no-console
   .catch((e) => console.log(e));
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hello World!");
+// });
