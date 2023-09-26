@@ -34,7 +34,7 @@ mongoose
   // eslint-disable-next-line no-console
   .catch((e) => console.log(e));
 
-app.get("/api", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 export default app
