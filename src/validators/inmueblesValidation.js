@@ -85,16 +85,13 @@ const userSchema = Joi.object({
   images: Joi.array()
     .items(
       Joi.string()
-        .uri()
         .pattern(/^https?:\/\/.+\.(jpg|jpeg|png|gif)$/),
     )
 
     .messages({
       "any.required": "Debes proporcionar al menos una imagen",
-      "array.base": "Las imágenes deben ser proporcionadas como un arreglo",
-      "string.uri": "Las imágenes deben ser URLs válidas",
       "string.pattern.base":
-        "Las imágenes deben ser URLs con formato de imagen (jpg, jpeg, png o gif)",
+        "Las imágenes deben tener un formato correcto (jpg, jpeg, png o gif)",
     }),
 });
 

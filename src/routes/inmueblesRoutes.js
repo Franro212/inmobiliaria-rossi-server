@@ -9,6 +9,7 @@ import {
 import multer from "multer";
 import verifyToken from "../validators/auth";
 import { verifyPerfil } from "../validators/perfil";
+import validateInmuebles from "../validators/inmueblesValidation";
 
 const router = express.Router();
 const storage = multer.memoryStorage();
@@ -23,11 +24,11 @@ router
     "/",
     verifyToken,
     verifyPerfil,
-
+    validateInmuebles,
     upload.array("images", 6),
     createInmueble,
   )
-  .put("/:id", verifyToken, verifyPerfil, updateInmueble)
+  .put("/:id", verifyToken, verifyPerfil, validateInmuebles, updateInmueble)
   .delete("/:id", verifyToken, verifyPerfil, deleteInmueble);
 
 export default router;
