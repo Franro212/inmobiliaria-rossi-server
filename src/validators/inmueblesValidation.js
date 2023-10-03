@@ -1,86 +1,77 @@
 import Joi from "joi";
 
 const userSchema = Joi.object({
-  tipo_operacion: Joi.string().min(4).max(10).messages({
-    "string.base": "El tipo de operación debe ser una cadena",
-    "string.empty": "El tipo de operación no puede estar vacío",
-    "string.min":
-      "El tipo de operación debe tener al menos {#limit} caracteres",
-    "string.max":
-      "El tipo de operación debe tener como máximo {#limit} caracteres",
+  tipo_operacion: Joi.string().messages({
+    "string.base": "Este campo solo acepta letras",
+    "any.required": "Este campo es requerido",
   }),
-  tipo_inmueble: Joi.string().min(4).max(10).messages({
-    "string.base": "El tipo de inmueble debe ser una cadena",
-    "string.empty": "El tipo de inmueble no puede estar vacío",
-    "string.min": "El tipo de inmueble debe tener al menos {#limit} caracteres",
-    "string.max":
-      "El tipo de inmueble debe tener como máximo {#limit} caracteres",
+  tipo_inmueble: Joi.string().messages({
+    "string.base": "Este campo solo acepta letras",
+    "any.required": "Este campo es requerido",
   }),
   banio: Joi.number().integer().min(1).max(99).messages({
-    "number.base": "Solo se aceptan números",
-    "number.integer": "El número de baños debe ser un entero",
-    "number.min": "El número de baños debe ser como mínimo {#limit}",
-    "number.max": "El número de baños debe ser como máximo {#limit}",
+    "number.base": "Este campo solo acepta números",
+    "number.integer": "Este campo solo acepta números enteros",
+    "number.min": "Debe ingresar como mínimo {#limit}",
+    "number.max": "El maximo permitido es {#limit}",
   }),
-  m2_terreno: Joi.number().min(10).max(9999).positive().messages({
-    "number.base": "El valor de m2 de terreno debe ser un número",
-    "number.positive": "El valor de m2 de terreno debe ser un número positivo",
+  m2_terreno: Joi.number().positive().messages({
+    "number.base": "Este campo solo acepta números",
+    "number.positive": "Debe ingresar un valor positivo",
   }),
   m2_edificado: Joi.number().min(10).max(9999).positive().messages({
-    "number.base": "El valor de m2 edificado debe ser un número",
-    "number.positive": "El valor de m2 edificado debe ser un número positivo",
+    "number.base": "Este campo solo acepta números",
+    "number.positive": "Debe ingresar un valor positivo",
   }),
   ciudad: Joi.string().min(4).max(50).messages({
-    "string.base": "La ciudad debe ser una cadena",
-    "string.empty": "La ciudad no puede estar vacía",
-    "string.min": "La ciudad debe tener al menos {#limit} caracteres",
-    "string.max": "La ciudad debe tener como máximo {#limit} caracteres",
+    "string.base": "Este campo solo acepta letras",
+    "any.required": "Este campo es requerido",
+    "string.min": "Debe tener al menos {#limit} caracteres",
+    "string.max": "Debe tener como máximo {#limit} caracteres",
   }),
   dormitorio: Joi.number().integer().min(1).max(99).messages({
-    "number.base": "Solo se aceptan números",
-    "number.integer": "El número de dormitorios debe ser un entero",
-    "number.min": "El número de dormitorios debe ser como mínimo {#limit}",
-    "number.max": "El número de dormitorios debe ser como máximo {#limit}",
+    "number.base": "Este campo solo acepta números",
+    "number.integer": "Este campo solo acepta números enteros",
+    "number.min": "Debe ingresar como mínimo {#limit}",
+    "number.max": "El maximo permitido es {#limit}",
   }),
   descripcion: Joi.string().min(10).max(200).messages({
-    "string.base": "La descripción solo acepta letras",
-    "string.min": "La descripción debe tener al menos {#limit} caracteres",
-    "string.max": "La descripción debe tener como máximo {#limit} caracteres",
+    "string.base": "Este campo solo acepta letras",
+    "any.required": "Este campo es requerido",
+    "string.min": "Debe ingresar como mínimo {#limit} caracteres",
+    "string.max": "El maximo permitido es {#limit} caracteres",
   }),
   precio: Joi.number().positive().messages({
-    "number.base": "El precio debe ser un número",
-    "number.empty": "El precio no puede estar vacío",
-    "number.positive": "El precio debe ser un número positivo",
+    "number.base": "Este campo solo acepta números",
+    "any.required": "Este campo es requerido",
+    "number.positive": "Debe ingresar un valor positivo",
   }),
   garantia: Joi.string().min(4).max(50).messages({
-    "string.base": "La garantía solo acepta letras",
-    "string.empty": "La garantía no puede estar vacía",
-    "string.min": "La garantía debe tener al menos {#limit} caracteres",
-    "string.max": "La garantía debe tener como máximo {#limit} caracteres",
-    "any.required": "El campo garantía es obligatorio",
+    "string.base": "Este campo solo acepta letras",
+    "string.min": "Debe ingresar como mínimo {#limit} caracteres",
+    "string.max": "El maximo permitido es {#limit} caracteres",
   }),
   departamento: Joi.string().min(4).max(50).messages({
-    "string.base": "El departamento solo acepta letras",
-    "string.empty": "El departamento no puede estar vacío",
-    "string.min": "El departamento debe tener al menos {#limit} caracteres",
-    "string.max": "El departamento debe tener como máximo {#limit} caracteres",
-    "any.required": "El campo departamento es obligatorio",
+    "any.required": "Este campo es requerido",
+    "string.base": "Este campo solo acepta letras",
+    "string.min": "Debe ingresar como mínimo {#limit} caracteres",
+    "string.max": "El maximo permitido es {#limit} caracteres",
+    "any.required": "Este campo es obligatorio",
   }),
   moneda: Joi.string().messages({
-    "string.base": "El campo moneda solo acepta letras",
-    "string.empty": "El campo moneda no puede estar vacío",
-    "any.required": "El campo moneda es obligatorio",
+    "string.base": "Este campo solo acepta letras",
+    "any.required": "Este campo es requerido",
   }),
   barrio: Joi.string().min(4).max(50).messages({
-    "string.base": "El barrio solo acepta letras",
-    "string.min": "El barrio debe tener al menos {#limit} caracteres",
-    "string.max": "El barrio debe tener como máximo {#limit} caracteres",
+    "string.base": "Este campo solo acepta letras",
+    "any.required": "Este campo es requerido",
+    "string.min": "Debe ingresar como mínimo {#limit} caracteres",
+    "string.max": "El maximo permitido es {#limit} caracteres",
   }),
   direccion: Joi.string().min(10).max(200).messages({
-    "string.base": "La dirección solo acepta letras",
-    "string.empty": "La dirección no puede estar vacía",
-    "string.min": "La dirección debe tener al menos {#limit} caracteres",
-    "string.max": "La dirección debe tener como máximo {#limit} caracteres",
+    "any.required": "Este campo es requerido",
+    "string.min": "Debe ingresar como mínimo {#limit} caracteres",
+    "string.max": "El maximo permitido es {#limit} caracteres",
   }),
   images: Joi.array()
     .items(
@@ -89,7 +80,7 @@ const userSchema = Joi.object({
     )
 
     .messages({
-      "any.required": "Debes proporcionar al menos una imagen",
+      "any.required": "Este campo es requerido",
       "string.pattern.base":
         "Las imágenes deben tener un formato correcto (jpg, jpeg, png o gif)",
     }),
