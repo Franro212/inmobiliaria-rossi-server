@@ -35,12 +35,7 @@ const userSchema = Joi.object({
     "number.min": "Debe ingresar como mínimo {#limit}",
     "number.max": "El maximo permitido es {#limit}",
   }),
-  descripcion: Joi.string().min(10).max(200).messages({
-    "string.base": "Este campo solo acepta letras",
-    "any.required": "Este campo es requerido",
-    "string.min": "Debe ingresar como mínimo {#limit} caracteres",
-    "string.max": "El maximo permitido es {#limit} caracteres",
-  }),
+
   precio: Joi.number().positive().messages({
     "number.base": "Este campo solo acepta números",
     "any.required": "Este campo es requerido",
@@ -56,7 +51,6 @@ const userSchema = Joi.object({
     "string.base": "Este campo solo acepta letras",
     "string.min": "Debe ingresar como mínimo {#limit} caracteres",
     "string.max": "El maximo permitido es {#limit} caracteres",
-    "any.required": "Este campo es obligatorio",
   }),
   moneda: Joi.string().messages({
     "string.base": "Este campo solo acepta letras",
@@ -74,10 +68,7 @@ const userSchema = Joi.object({
     "string.max": "El maximo permitido es {#limit} caracteres",
   }),
   images: Joi.array()
-    .items(
-      Joi.string()
-        .pattern(/^https?:\/\/.+\.(jpg|jpeg|png|gif)$/),
-    )
+    .items(Joi.string().pattern(/^https?:\/\/.+\.(jpg|jpeg|png|gif)$/))
 
     .messages({
       "any.required": "Este campo es requerido",

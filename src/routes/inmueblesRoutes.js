@@ -25,7 +25,7 @@ router
     verifyToken,
     verifyPerfil,
     validateInmuebles,
-    upload.array("images", 6),
+    upload.array("images", 10),
     createInmueble,
   )
   .put("/:id", verifyToken, verifyPerfil, validateInmuebles, updateInmueble)
